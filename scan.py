@@ -9,7 +9,7 @@ class Book:
     def __init__(self, score):
         self.score = score
 
-allLibs = []
+all_libs = []
 
 with open('input.txt', 'r') as input:
     book_num, lib_num, deadline = map(int, input.readline().split())
@@ -18,7 +18,7 @@ with open('input.txt', 'r') as input:
         _book_num, _singup, _books_per_day = map(int, input.readline().split())
         _books = map(int, input.readline().split())
         lib = Library(_book_num, _books, _books_per_day, _singup)
-        allLibs.append(lib)
+        all_libs.append(lib)
 
 with open('output.txt', 'w+') as output:
     output.write(str(deadline)+'\n')
