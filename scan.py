@@ -37,22 +37,27 @@ with open('input.txt', 'r') as input:
             if b not in all_books:
                 all_books.append(b)
         for _book in _books:
-            if not _book in all_books_dict or (_book in all_books_dict and all_books_dict.get(_book).singup<=lib.singup):
-                all_books_dict.update({_book: lib})
+            if not str(_book) in all_books_dict or (str(_book) in all_books_dict and all_books_dict.get(str(_book)).singup<=lib.singup):
+                all_books_dict.update({str(_book): lib})
 
 all_books.sort()
 res_all_libs = []
 for book in all_books:
-    if(deadline-all_books_dict.get(book).singup>=0 and book in all_books_dict):
-        lib = all_books_dict.get(book)
+    if(str(book) in all_books_dict and deadline-all_books_dict.get(str(book)).singup>=0):
+        lib = all_books_dict.get(str(book))
         deadline -= lib.singup
-        res_all_libs.append(AnsLib(lib._id, deadline*lib.books_per_day, lib.books[:min(len(lib.books), deadline*lib.books_per_day)], lib.books_per_day, lib.singup))
-        for _ in range(min(len(lib.books), deadline*lib.books_per_day)):
-            all_books_dict.pop(_)
+        cur_books = []
+        for _ in lib.books[:min(len(lib.books), deadline*lib.books_per_day)]:
+            if _ in all_books_dict:
+                cur_books.append(_)
+                del all_books_dict[_]
+        res_all_libs.append(AnsLib(lib._id, deadline*lib.books_per_day, cur_books, lib.books_per_day, lib.singup))
+        
+
 
 
 with open('output.txt', 'w+') as output:
-    ouput.write(str(len(res_all_libs)) + '\n')
+    output.write(str(len(res_all_libs)) + '\n')
     for res_lib in res_all_libs:
         output.write(str(res_lib._id) + ' ' + str(res_lib.book_num)+'\n')
         for book in res_lib.books:
